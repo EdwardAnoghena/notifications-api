@@ -5,25 +5,26 @@ namespace NotificationsApi.V1.Factories
 {
     public static class EntityFactory
     {
-        public static Entity ToDomain(this DatabaseEntity databaseEntity)
+        public static Notification ToDomain(this NotificationEntity databaseEntity)
         {
-            //TODO: Map the rest of the fields in the domain object.
-            // More information on this can be found here https://github.com/LBHackney-IT/lbh-base-api/wiki/Factory-object-mappings
 
-            return new Entity
+            return new Notification
             {
                 Id = databaseEntity.Id,
+                TargetId = databaseEntity.TargetId,
+                TargetType = databaseEntity.TargetType,
                 CreatedAt = databaseEntity.CreatedAt
             };
         }
 
-        public static DatabaseEntity ToDatabase(this Entity entity)
+        public static NotificationEntity ToDatabase(this Notification entity)
         {
-            //TODO: Map the rest of the fields in the database object.
 
-            return new DatabaseEntity
+            return new NotificationEntity
             {
                 Id = entity.Id,
+                TargetId = entity.TargetId,
+                TargetType = entity.TargetType,
                 CreatedAt = entity.CreatedAt
             };
         }

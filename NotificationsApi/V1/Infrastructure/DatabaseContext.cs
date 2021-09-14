@@ -11,6 +11,6 @@ namespace NotificationsApi.V1.Infrastructure
         {
         }
 
-        public DbSet<DatabaseEntity> DatabaseEntities { get; set; }
+        public DbSet<NotificationEntity> DatabaseEntities { get; set; }
     }
 }
