@@ -151,16 +151,13 @@ namespace NotificationsApi
 
         private static void RegisterGateways(IServiceCollection services)
         {
-            services.AddScoped<IExampleGateway, ExampleGateway>();
-
-            //TODO: For DynamoDb, remove the line above and uncomment the line below.
-            //services.AddScoped<IExampleGateway, DynamoDbGateway>();
+            services.AddScoped<INotificationGateway, DynamoDbGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
-            services.AddScoped<IGetAllUseCase, GetAllUseCase>();
-            services.AddScoped<IGetByIdUseCase, GetByIdUseCase>();
+            services.AddScoped<IGetAllNotificationCase, GetAllNotificationCase>();
+            services.AddScoped<IGetByIdNotificationCase, GetByIdNotificationCase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

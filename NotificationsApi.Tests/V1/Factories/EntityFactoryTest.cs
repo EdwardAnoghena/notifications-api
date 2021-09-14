@@ -17,7 +17,7 @@ namespace NotificationsApi.Tests.V1.Factories
         [Test]
         public void CanMapADatabaseEntityToADomainObject()
         {
-            var databaseEntity = _fixture.Create<DatabaseEntity>();
+            var databaseEntity = _fixture.Create<NotificationEntity>();
             var entity = databaseEntity.ToDomain();
 
             databaseEntity.Id.Should().Be(entity.Id);
@@ -29,7 +29,7 @@ namespace NotificationsApi.Tests.V1.Factories
         [Test]
         public void CanMapADomainEntityToADatabaseObject()
         {
-            var entity = _fixture.Create<Entity>();
+            var entity = _fixture.Create<Notification>();
             var databaseEntity = entity.ToDatabase();
 
             entity.Id.Should().Be(databaseEntity.Id);

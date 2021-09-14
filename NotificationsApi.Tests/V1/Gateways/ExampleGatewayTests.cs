@@ -33,7 +33,7 @@ namespace NotificationsApi.Tests.V1.Gateways
         [Test]
         public void GetEntityByIdReturnsTheEntityIfItExists()
         {
-            var entity = _fixture.Create<Entity>();
+            var entity = _fixture.Create<Notification>();
             var databaseEntity = DatabaseEntityHelper.CreateDatabaseEntityFrom(entity);
 
             DatabaseContext.DatabaseEntities.Add(databaseEntity);

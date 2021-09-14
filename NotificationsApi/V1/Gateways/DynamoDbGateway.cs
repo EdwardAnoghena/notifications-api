@@ -1,12 +1,17 @@
 using Amazon.DynamoDBv2.DataModel;
+using NotificationsApi.V1.Boundary.Request;
+using NotificationsApi.V1.Boundary.Response;
 using NotificationsApi.V1.Domain;
 using NotificationsApi.V1.Factories;
 using NotificationsApi.V1.Infrastructure;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NotificationsApi.V1.Gateways
 {
-    public class DynamoDbGateway : IExampleGateway
+    public class DynamoDbGateway : INotificationGateway
     {
         private readonly IDynamoDBContext _dynamoDbContext;
 
@@ -15,15 +20,41 @@ namespace NotificationsApi.V1.Gateways
             _dynamoDbContext = dynamoDbContext;
         }
 
-        public List<Entity> GetAll()
+        public async Task AddAsync(Notification notification)
         {
-            return new List<Entity>();
+            var dbEntity = notification.ToDatabase();
+            await _dynamoDbContext.SaveAsync(dbEntity).ConfigureAwait(false);
+
         }
 
-        public Entity GetEntityById(int id)
+        public async Task<List<Notification>> GetAllAsync()
         {
-            var result = _dynamoDbContext.LoadAsync<DatabaseEntity>(id).GetAwaiter().GetResult();
+            List<ScanCondition> conditions = new List<ScanCondition>();
+            var data = await _dynamoDbContext.QueryAsync<NotificationEntity>(conditions).GetRemainingAsync().ConfigureAwait(false);
+            return data.Select(x => x.ToDomain()).ToList();
+        }
+
+        public Notification GetEntityById(int id)
+        {
+            var result = _dynamoDbContext.LoadAsync<NotificationEntity>(id).GetAwaiter().GetResult();
             return result?.ToDomain();
+        }
+
+        public async Task<Notification> GetEntityByIdAsync(Guid id)
+        {
+            var result = await _dynamoDbContext.LoadAsync<NotificationEntity>(id).ConfigureAwait(false);
+            return result?.ToDomain();
+        }
+
+        public async Task UpdateAsync(Guid id, AppprovalRequest notification)
+        {
+            var result = await _dynamoDbContext.LoadAsync<NotificationEntity>(id).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(notification.ApprovalNote))
+                result.AuthorizerNote = notification.ApprovalNote;
+
+            result.ApprovalStatus = notification.ApprovalStatus;
+            result.AuthorizedDate = DateTime.UtcNow;
+            await _dynamoDbContext.SaveAsync(result).ConfigureAwait(false);
         }
     }
 }

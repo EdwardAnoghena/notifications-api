@@ -7,6 +7,7 @@ using NotificationsApi.V1.Infrastructure;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace NotificationsApi.Tests.V1.Gateways
 {
@@ -36,17 +37,17 @@ namespace NotificationsApi.Tests.V1.Gateways
         }
 
         [Test]
-        public void GetEntityByIdReturnsTheEntityIfItExists()
+        public async Task GetEntityByIdReturnsTheEntityIfItExists()
         {
-            var entity = _fixture.Create<Entity>();
+            var entity = _fixture.Create<Notification>();
             var dbEntity = DatabaseEntityHelper.CreateDatabaseEntityFrom(entity);
 
-            _dynamoDb.Setup(x => x.LoadAsync<DatabaseEntity>(entity.Id, default))
+            _dynamoDb.Setup(x => x.LoadAsync<NotificationEntity>(entity.Id, default))
                      .ReturnsAsync(dbEntity);
 
-            var response = _classUnderTest.GetEntityById(entity.Id);
+            var response = await _classUnderTest.GetEntityByIdAsync(entity.Id).ConfigureAwait(false);
 
-            _dynamoDb.Verify(x => x.LoadAsync<DatabaseEntity>(entity.Id, default), Times.Once);
+            _dynamoDb.Verify(x => x.LoadAsync<NotificationEntity>(entity.Id, default), Times.Once);
 
             entity.Id.Should().Be(response.Id);
             entity.CreatedAt.Should().BeSameDateAs(response.CreatedAt);

@@ -11,7 +11,7 @@ namespace NotificationsApi.Tests.V1.Factories
         [Test]
         public void CanMapADatabaseEntityToADomainObject()
         {
-            var domain = new Entity();
+            var domain = new Notification();
             var response = domain.ToResponse();
             //TODO: check here that all of the fields have been mapped correctly. i.e. response.fieldOne.Should().Be("one")
         }
