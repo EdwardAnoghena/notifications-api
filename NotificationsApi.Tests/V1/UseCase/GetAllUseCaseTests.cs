@@ -35,7 +35,7 @@ namespace NotificationsApi.Tests.V1.UseCase
             var expectedResponse = new NotificationResponseObjectList { ResponseObjects = stubbedEntities.ToResponse() };
 
             var response = await _classUnderTest.ExecuteAsync().ConfigureAwait(false);
-           response.Should().BeEquivalentTo(expectedResponse);
+            response.Should().BeEquivalentTo(expectedResponse);
         }
 
         //TODO: Add extra tests here for extra functionality added to the use case

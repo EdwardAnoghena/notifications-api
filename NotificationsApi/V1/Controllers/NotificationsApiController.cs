@@ -2,23 +2,32 @@ using NotificationsApi.V1.Boundary.Response;
 using NotificationsApi.V1.UseCase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System;
+using NotificationsApi.V1.Boundary.Request;
 
 namespace NotificationsApi.V1.Controllers
 {
     [ApiController]
-    //TODO: Rename to match the APIs endpoint
-    [Route("api/v1/residents")]
+    [Route("api/v1/notifications")]
     [Produces("application/json")]
     [ApiVersion("1.0")]
-    //TODO: rename class to match the API name
     public class NotificationsApiController : BaseController
     {
-        private readonly IGetAllUseCase _getAllUseCase;
-        private readonly IGetByIdUseCase _getByIdUseCase;
-        public NotificationsApiController(IGetAllUseCase getAllUseCase, IGetByIdUseCase getByIdUseCase)
+        private readonly IGetAllNotificationCase _getAllNotificationCase;
+        private readonly IGetByIdNotificationCase _getByIdNotificationCase;
+        private readonly IAddNotificationUseCase _addNotificationUseCase;
+        private readonly IUpdateNotificationUseCase _updateNotificationUseCase;
+        private readonly IGetTargetDetailsCase _getTargetDetailsCase;
+        public NotificationsApiController(IGetAllNotificationCase getAllNotificationCase, IGetByIdNotificationCase getByIdNotificationCase,
+                                           IAddNotificationUseCase addNotificationUseCase, IUpdateNotificationUseCase updateNotificationUseCase,
+                                           IGetTargetDetailsCase getTargetDetailsCase)
         {
-            _getAllUseCase = getAllUseCase;
-            _getByIdUseCase = getByIdUseCase;
+            _getAllNotificationCase = getAllNotificationCase;
+            _getByIdNotificationCase = getByIdNotificationCase;
+            _addNotificationUseCase = addNotificationUseCase;
+            _updateNotificationUseCase = updateNotificationUseCase;
+            _getTargetDetailsCase = getTargetDetailsCase;
         }
 
         //TODO: add xml comments containing information that will be included in the auto generated swagger docs (https://github.com/LBHackney-IT/lbh-base-api/wiki/Controllers-and-Response-Objects)
@@ -27,11 +36,11 @@ namespace NotificationsApi.V1.Controllers
         /// </summary>
         /// <response code="200">...</response>
         /// <response code="400">Invalid Query Parameter.</response>
-        [ProducesResponseType(typeof(ResponseObjectList), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(NotificationResponseObjectList), StatusCodes.Status200OK)]
         [HttpGet]
-        public IActionResult ListContacts()
+        public async Task<IActionResult> ListNotificationAsync()
         {
-            return Ok(_getAllUseCase.Execute());
+            return Ok(await _getAllNotificationCase.ExecuteAsync().ConfigureAwait(false));
         }
 
         /// <summary>
@@ -39,13 +48,50 @@ namespace NotificationsApi.V1.Controllers
         /// </summary>
         /// <response code="200">...</response>
         /// <response code="404">No ? found for the specified ID</response>
-        [ProducesResponseType(typeof(ResponseObject), StatusCodes.Status200OK)]
+        /// 
+        [ProducesResponseType(typeof(NotificationDetailsObject), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        //TODO: rename to match the identifier that will be used
-        [Route("{yourId}")]
-        public IActionResult ViewRecord(int yourId)
+        [Route("{id}")]
+        public async Task<IActionResult> ViewRecordAsync(Guid id)
         {
-            return Ok(_getByIdUseCase.Execute(yourId));
+            var result = await _getByIdNotificationCase.ExecuteAsync(id).ConfigureAwait(false);
+            if (result == null)
+                return NotFound();
+
+            return Ok(await _getTargetDetailsCase.ExecuteAsync(id).ConfigureAwait(false));
+        }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost]
+        public async Task<IActionResult> AddAsync([FromBody] NotificationRequest request)
+        {
+
+            var result = await _addNotificationUseCase.ExecuteAsync(request).ConfigureAwait(false);
+            return CreatedAtRoute(nameof(ViewRecordAsync), new { id = result });
+
+        }
+
+        [ProducesResponseType(typeof(ActionResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] AppprovalRequest request)
+        {
+
+            var result = await _updateNotificationUseCase.ExecuteAsync(id, request).ConfigureAwait(false);
+            if (result.Status)
+                return Ok(result);
+
+            return BadRequest(result);
+
         }
     }
 }
