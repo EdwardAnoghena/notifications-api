@@ -21,9 +21,9 @@ namespace NotificationsApi.V1.Infrastructure
     [DynamoDBTable("notifications", LowerCamelCaseProperties = true)]
     public class NotificationEntity
     {
+        //[DynamoDBProperty(AttributeName = "id")]
+        //public Guid Id { get; set; }
         [DynamoDBHashKey]
-        [DynamoDBProperty(AttributeName = "id")]
-        public Guid Id { get; set; }
         [DynamoDBProperty(AttributeName = "target_id")]
         public Guid TargetId { get; set; }
 

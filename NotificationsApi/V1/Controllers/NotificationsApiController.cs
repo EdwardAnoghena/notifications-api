@@ -49,19 +49,20 @@ namespace NotificationsApi.V1.Controllers
         /// <response code="200">...</response>
         /// <response code="404">No ? found for the specified ID</response>
         /// 
-        [ProducesResponseType(typeof(NotificationDetailsObject), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(NotificationResponseObject), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> ViewRecordAsync(Guid id)
+        [Route("{targetId}")]
+        public async Task<IActionResult> GetAsync(Guid targetId)
         {
-            var result = await _getByIdNotificationCase.ExecuteAsync(id).ConfigureAwait(false);
+            var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
             if (result == null)
                 return NotFound();
 
-            return Ok(await _getTargetDetailsCase.ExecuteAsync(id).ConfigureAwait(false));
+            return Ok(result);
+            //return Ok(await _getTargetDetailsCase.ExecuteAsync(id).ConfigureAwait(false));
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -73,7 +74,7 @@ namespace NotificationsApi.V1.Controllers
         {
 
             var result = await _addNotificationUseCase.ExecuteAsync(request).ConfigureAwait(false);
-            return CreatedAtRoute(nameof(ViewRecordAsync), new { id = result });
+            return CreatedAtAction(nameof(GetAsync), new { id = result });
 
         }
 
@@ -82,11 +83,11 @@ namespace NotificationsApi.V1.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPatch]
-        [Route("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] AppprovalRequest request)
+        [Route("{targetId}")]
+        public async Task<IActionResult> UpdateAsync(Guid targetId, [FromBody] AppprovalRequest request)
         {
 
-            var result = await _updateNotificationUseCase.ExecuteAsync(id, request).ConfigureAwait(false);
+            var result = await _updateNotificationUseCase.ExecuteAsync(targetId, request).ConfigureAwait(false);
             if (result.Status)
                 return Ok(result);
 

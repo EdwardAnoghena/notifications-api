@@ -17,7 +17,15 @@ namespace NotificationsApi.Tests.V1.Helper
         {
             return new NotificationEntity
             {
-                Id = entity.Id,
+                //Id = entity.Id,
+                TargetId = entity.TargetId,
+                TargetType= entity.TargetType,
+                ApprovalStatus= entity.ApprovalStatus,
+                AuthorizedBy= entity.AuthorizedBy,
+                AuthorizedDate= entity.AuthorizedDate,
+                AuthorizerNote= entity.AuthorizerNote,
+                IsReadStatus= entity.IsReadStatus,
+                Message=entity.Message,
                 CreatedAt = entity.CreatedAt,
             };
         }

@@ -113,9 +113,9 @@ namespace NotificationsApi
 
             ConfigureLogging(services, Configuration);
 
-            ConfigureDbContext(services);
+            //ConfigureDbContext(services);
             //TODO: For DynamoDb, remove the line above and uncomment the line below.
-            // services.ConfigureDynamoDB();
+            services.ConfigureDynamoDB();
 
             RegisterGateways(services);
             RegisterUseCases(services);
@@ -158,6 +158,9 @@ namespace NotificationsApi
         {
             services.AddScoped<IGetAllNotificationCase, GetAllNotificationCase>();
             services.AddScoped<IGetByIdNotificationCase, GetByIdNotificationCase>();
+            services.AddScoped<IAddNotificationUseCase, AddNotificationUseCase>();
+            services.AddScoped<IUpdateNotificationUseCase, UpdateNotificationUseCase>();
+            services.AddScoped<IGetTargetDetailsCase, GetTargetDetailsCase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
