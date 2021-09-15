@@ -8,10 +8,11 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using System;
 
 namespace NotificationsApi.Tests.V1.Gateways
 {
-    
+
     [TestFixture]
     public class DynamoDbGatewayTests
     {
@@ -29,7 +30,8 @@ namespace NotificationsApi.Tests.V1.Gateways
         [Test]
         public void GetEntityByIdReturnsNullIfEntityDoesntExist()
         {
-            var response = _classUnderTest.GetEntityById(123);
+            var guid = Guid.NewGuid();
+            var response = _classUnderTest.GetEntityById(guid);
 
             response.Should().BeNull();
         }

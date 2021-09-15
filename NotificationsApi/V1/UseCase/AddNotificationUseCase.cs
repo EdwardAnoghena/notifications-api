@@ -19,7 +19,7 @@ namespace NotificationsApi.V1.UseCase
 
         public async Task<Guid> ExecuteAsync(NotificationRequest request)
         {
-            var notification = new Notification { TargetId = request.TargetId, TargetType = request.TargetType, Message=GetMessage(request.TargetType) };
+            var notification = new Notification { TargetId = request.TargetId, TargetType = request.TargetType, Message = GetMessage(request.TargetType) };
             await _gateway.AddAsync(notification).ConfigureAwait(false);
             return notification.TargetId;
         }

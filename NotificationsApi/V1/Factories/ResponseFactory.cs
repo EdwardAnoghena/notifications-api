@@ -7,7 +7,7 @@ namespace NotificationsApi.V1.Factories
 {
     public static class ResponseFactory
     {
-        
+
         public static NotificationResponseObject ToResponse(this Notification domain)
         {
             return new NotificationResponseObject
@@ -18,7 +18,7 @@ namespace NotificationsApi.V1.Factories
                 AuthorizedBy = domain.AuthorizedBy,
                 AuthorizedDate = domain.AuthorizedDate,
                 AuthorizerNote = domain.AuthorizerNote,
-                ApprovalStatus= domain.ApprovalStatus,
+                ApprovalStatus = domain.ApprovalStatus,
                 IsReadStatus = domain.IsReadStatus,
                 Message = domain.Message,
                 CreatedDate = domain.CreatedAt

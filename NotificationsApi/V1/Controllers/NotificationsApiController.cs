@@ -86,12 +86,14 @@ namespace NotificationsApi.V1.Controllers
         [Route("{targetId}")]
         public async Task<IActionResult> UpdateAsync(Guid targetId, [FromBody] AppprovalRequest request)
         {
+            var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
+            if (result == null)
+                return NotFound();
+            var updateResult = await _updateNotificationUseCase.ExecuteAsync(targetId, request).ConfigureAwait(false);
+            if (updateResult.Status)
+                return Ok(updateResult);
 
-            var result = await _updateNotificationUseCase.ExecuteAsync(targetId, request).ConfigureAwait(false);
-            if (result.Status)
-                return Ok(result);
-
-            return BadRequest(result);
+            return BadRequest(updateResult);
 
         }
     }

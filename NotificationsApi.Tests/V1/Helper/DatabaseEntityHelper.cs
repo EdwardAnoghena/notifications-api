@@ -19,13 +19,13 @@ namespace NotificationsApi.Tests.V1.Helper
             {
                 //Id = entity.Id,
                 TargetId = entity.TargetId,
-                TargetType= entity.TargetType,
-                ApprovalStatus= entity.ApprovalStatus,
-                AuthorizedBy= entity.AuthorizedBy,
-                AuthorizedDate= entity.AuthorizedDate,
-                AuthorizerNote= entity.AuthorizerNote,
-                IsReadStatus= entity.IsReadStatus,
-                Message=entity.Message,
+                TargetType = entity.TargetType,
+                ApprovalStatus = entity.ApprovalStatus,
+                AuthorizedBy = entity.AuthorizedBy,
+                AuthorizedDate = entity.AuthorizedDate,
+                AuthorizerNote = entity.AuthorizerNote,
+                IsReadStatus = entity.IsReadStatus,
+                Message = entity.Message,
                 CreatedAt = entity.CreatedAt,
             };
         }

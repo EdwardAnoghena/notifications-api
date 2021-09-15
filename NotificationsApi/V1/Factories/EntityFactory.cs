@@ -28,15 +28,15 @@ namespace NotificationsApi.V1.Factories
 
             return new NotificationEntity
             {
-               // Id = entity.Id,
+                // Id = entity.Id,
                 TargetId = entity.TargetId,
                 TargetType = entity.TargetType,
-                Message=entity.Message,
+                Message = entity.Message,
                 ApprovalStatus = entity.ApprovalStatus,
-                AuthorizedBy= entity.AuthorizedBy,
-                AuthorizedDate= entity.AuthorizedDate,
-                AuthorizerNote= entity.AuthorizerNote,
-                IsReadStatus=entity.IsReadStatus,
+                AuthorizedBy = entity.AuthorizedBy,
+                AuthorizedDate = entity.AuthorizedDate,
+                AuthorizerNote = entity.AuthorizerNote,
+                IsReadStatus = entity.IsReadStatus,
                 CreatedAt = entity.CreatedAt
             };
         }

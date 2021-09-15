@@ -6,7 +6,7 @@ namespace NotificationsApi.V1.Domain
 
     public class Notification
     {
-       // public Guid Id { get; set; } = Guid.NewGuid();
+        // public Guid Id { get; set; } = Guid.NewGuid();
         public Guid TargetId { get; set; }
         public TargetType TargetType { get; set; }
         public string Message { get; set; }
