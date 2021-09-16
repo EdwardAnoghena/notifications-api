@@ -16,13 +16,13 @@ namespace NotificationsApi.V1.UseCase
             _gateway = gateway;
         }
 
-        public async Task<ActionResponse> ExecuteAsync(Guid id, AppprovalRequest request)
+        public async Task<ActionResponse> ExecuteAsync(Guid id, ApprovalRequest request)
         {
             await _gateway.UpdateAsync(id, request).ConfigureAwait(false);
             var rId = await _gateway.GetEntityByIdAsync(id).ConfigureAwait(false);
             var status = rId.AuthorizedDate.HasValue && (rId.AuthorizedDate.Value.Date == DateTime.Today.Date);
 
-            return new ActionResponse { Status = status, Message = status ? "Approval successfully" : "Approval Failed" };
+            return new ActionResponse { Status = status, Message = status ? "Approval successfull" : "Approval Failed" };
         }
     }
 }

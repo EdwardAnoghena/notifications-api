@@ -22,6 +22,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using FluentValidation.AspNetCore;
+using Hellang.Middleware.ProblemDetails;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
+using Hellang.Middleware.ProblemDetails.Mvc;
+using System.ComponentModel.DataAnnotations;
+using NotificationsApi.V1.Extensions;
+using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime.Internal;
+//using System.Text.Json.Serialization;
 
 namespace NotificationsApi
 {
@@ -42,9 +52,18 @@ namespace NotificationsApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvc()
+            services.AddMvc().AddProblemDetailsConventions()
+                  .AddFluentValidation(fv =>
+                  {
+                      fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                  })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddProblemDetails(options =>
+            {
+                options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+                options.MapToStatusCode<HttpRequestException>(StatusCodes.Status503ServiceUnavailable);
+                options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+            });
             services.AddApiVersioning(o =>
             {
                 o.DefaultApiVersion = new ApiVersion(1, 0);
@@ -162,10 +181,10 @@ namespace NotificationsApi
             services.AddScoped<IUpdateNotificationUseCase, UpdateNotificationUseCase>();
             services.AddScoped<IGetTargetDetailsCase, GetTargetDetailsCase>();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseProblemDetails();
             app.UseCorrelation();
 
             if (env.IsDevelopment())
@@ -198,6 +217,7 @@ namespace NotificationsApi
             });
             app.UseSwagger();
             app.UseRouting();
+            // app.UseMiddleware<ExceptionMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 // SwaggerGen won't find controllers that are routed via this technique.
