@@ -1,4 +1,4 @@
-service: your-api-name
+service: notifications-api
 provider:
   name: aws
   runtime: dotnetcore3.1
@@ -22,7 +22,7 @@ provider:
 
 package:
 # TODO: Rename zipfile in build.sh and build.cmd to match this
-  artifact: ./bin/release/netcoreapp3.1/your-api-name.zip
+  artifact: ./bin/release/netcoreapp3.1/notifications-api.zip
 
 functions:
   NotificationsApi:
@@ -32,7 +32,7 @@ functions:
     environment:
 # TODO: Create ssm variables for this API's postgres mirror then rename base-api below to match api name
 # TODO: Remove this line if DynamoDb is being used
-      CONNECTION_STRING: Host=${ssm:/base-api/${self:provider.stage}/postgres-hostname};Port=${ssm:/base-api/${self:provider.stage}/postgres-port};Database=base-api-mirror;Username=${ssm:/base-api/${self:provider.stage}/postgres-username};Password=${ssm:/base-api/${self:provider.stage}/postgres-password}
+ #     CONNECTION_STRING: Host=${ssm:/base-api/${self:provider.stage}/postgres-hostname};Port=${ssm:/base-api/${self:provider.stage}/postgres-port};Database=base-api-mirror;Username=${ssm:/base-api/${self:provider.stage}/postgres-username};Password=${ssm:/base-api/${self:provider.stage}/postgres-password}
     events:
       - http:
           path: /{proxy+}
@@ -61,7 +61,7 @@ resources:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
           - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
 # TODO: Enable this line and set the correct policy name if DynamoDb is in use
-#          - arn:aws:iam::${self:provider.account}:policy/base-api/lambda-dynamodb-base-api
+          - arn:aws:iam::${self:provider.account}:policy/notifications-api/lambda-dynamodb-base-api
         Policies:
           - PolicyName: manageLogs
             PolicyDocument:
@@ -99,14 +99,20 @@ resources:
 custom:
   vpc:
     development:
+      securityGroupIds:
+        - sg-0b1844c4c2d5096a2
       subnetIds:
-        - subnet-0deabb5d8fb9c3446
-        - subnet-000b89c249f12a8ad
+        - subnet-0140d06fb84fdb547
+        - subnet-05ce390ba88c42bfd
     staging:
+      securityGroupIds:
+        - sg-00c197e980177983d
       subnetIds:
-        - subnet-06d3de1bd9181b0d7
-        - subnet-0ed7d7713d1127656
+        - subnet-0743d86e9b362fa38
+        - subnet-0ea0020a44b98a2ca
     production:
+      securityGroupIds:
+        - sg-02a377899622e884c
       subnetIds:
-        - subnet-01d3657f97a243261
-        - subnet-0b7b8fea07efabf34
+        - subnet-0beb266003a56ca82
+        - subnet-06a697d86a9b6ed01
