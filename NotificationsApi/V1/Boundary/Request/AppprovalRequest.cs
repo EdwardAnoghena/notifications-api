@@ -1,4 +1,5 @@
 using NotificationsApi.V1.Common.Enums;
+using System;
 
 namespace NotificationsApi.V1.Boundary.Request
 {

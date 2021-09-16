@@ -20,7 +20,7 @@ namespace NotificationsApi.Tests.V1.Factories
             var databaseEntity = _fixture.Create<NotificationEntity>();
             var entity = databaseEntity.ToDomain();
 
-            databaseEntity.Id.Should().Be(entity.Id);
+            databaseEntity.TargetId.Should().Be(entity.TargetId);
             databaseEntity.CreatedAt.Should().BeSameDateAs(entity.CreatedAt);
         }
 
@@ -32,7 +32,7 @@ namespace NotificationsApi.Tests.V1.Factories
             var entity = _fixture.Create<Notification>();
             var databaseEntity = entity.ToDatabase();
 
-            entity.Id.Should().Be(databaseEntity.Id);
+            entity.TargetId.Should().Be(databaseEntity.TargetId);
             entity.CreatedAt.Should().BeSameDateAs(databaseEntity.CreatedAt);
         }
     }

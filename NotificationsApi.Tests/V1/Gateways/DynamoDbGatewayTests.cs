@@ -8,12 +8,11 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using System;
 
 namespace NotificationsApi.Tests.V1.Gateways
 {
-    //TODO: Remove this file if DynamoDb gateway not being used
-    //TODO: Rename Tests to match gateway name
-    //For instruction on how to run tests please see the wiki: https://github.com/LBHackney-IT/lbh-base-api/wiki/Running-the-test-suite.
+
     [TestFixture]
     public class DynamoDbGatewayTests
     {
@@ -31,7 +30,8 @@ namespace NotificationsApi.Tests.V1.Gateways
         [Test]
         public void GetEntityByIdReturnsNullIfEntityDoesntExist()
         {
-            var response = _classUnderTest.GetEntityById(123);
+            var guid = Guid.NewGuid();
+            var response = _classUnderTest.GetEntityById(guid);
 
             response.Should().BeNull();
         }
@@ -42,14 +42,14 @@ namespace NotificationsApi.Tests.V1.Gateways
             var entity = _fixture.Create<Notification>();
             var dbEntity = DatabaseEntityHelper.CreateDatabaseEntityFrom(entity);
 
-            _dynamoDb.Setup(x => x.LoadAsync<NotificationEntity>(entity.Id, default))
+            _dynamoDb.Setup(x => x.LoadAsync<NotificationEntity>(entity.TargetId, default))
                      .ReturnsAsync(dbEntity);
 
-            var response = await _classUnderTest.GetEntityByIdAsync(entity.Id).ConfigureAwait(false);
+            var response = await _classUnderTest.GetEntityByIdAsync(entity.TargetId).ConfigureAwait(false);
 
-            _dynamoDb.Verify(x => x.LoadAsync<NotificationEntity>(entity.Id, default), Times.Once);
+            _dynamoDb.Verify(x => x.LoadAsync<NotificationEntity>(entity.TargetId, default), Times.Once);
 
-            entity.Id.Should().Be(response.Id);
+            entity.TargetId.Should().Be(response.TargetId);
             entity.CreatedAt.Should().BeSameDateAs(response.CreatedAt);
         }
     }

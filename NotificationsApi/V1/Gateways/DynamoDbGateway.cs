@@ -1,4 +1,5 @@
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.Model;
 using NotificationsApi.V1.Boundary.Request;
 using NotificationsApi.V1.Boundary.Response;
 using NotificationsApi.V1.Domain;
@@ -30,11 +31,12 @@ namespace NotificationsApi.V1.Gateways
         public async Task<List<Notification>> GetAllAsync()
         {
             List<ScanCondition> conditions = new List<ScanCondition>();
-            var data = await _dynamoDbContext.QueryAsync<NotificationEntity>(conditions).GetRemainingAsync().ConfigureAwait(false);
+            DynamoDBOperationConfig operationConfig = null;
+            var data = await _dynamoDbContext.ScanAsync<NotificationEntity>(conditions, operationConfig).GetRemainingAsync().ConfigureAwait(false);
             return data.Select(x => x.ToDomain()).ToList();
         }
 
-        public Notification GetEntityById(int id)
+        public Notification GetEntityById(Guid id)
         {
             var result = _dynamoDbContext.LoadAsync<NotificationEntity>(id).GetAwaiter().GetResult();
             return result?.ToDomain();
@@ -49,7 +51,7 @@ namespace NotificationsApi.V1.Gateways
         public async Task UpdateAsync(Guid id, AppprovalRequest notification)
         {
             var result = await _dynamoDbContext.LoadAsync<NotificationEntity>(id).ConfigureAwait(false);
-            if (string.IsNullOrWhiteSpace(notification.ApprovalNote))
+            if (!string.IsNullOrWhiteSpace(notification.ApprovalNote))
                 result.AuthorizerNote = notification.ApprovalNote;
 
             result.ApprovalStatus = notification.ApprovalStatus;

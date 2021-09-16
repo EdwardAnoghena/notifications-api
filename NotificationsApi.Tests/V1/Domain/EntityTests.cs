@@ -11,8 +11,8 @@ namespace NotificationsApi.Tests.V1.Domain
         [Test]
         public void EntitiesHaveAnId()
         {
-            var entity = new Notification();
-            entity.Id.Should().NotBeEmpty();//.BeGreaterOrEqualTo(0);
+            var entity = new Notification { TargetId = Guid.NewGuid() };
+            entity.TargetId.Should().NotBeEmpty();//.BeGreaterOrEqualTo(0);
         }
 
         [Test]

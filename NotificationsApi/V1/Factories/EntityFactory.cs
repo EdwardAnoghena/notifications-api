@@ -10,9 +10,15 @@ namespace NotificationsApi.V1.Factories
 
             return new Notification
             {
-                Id = databaseEntity.Id,
+                //Id = databaseEntity.Id,
                 TargetId = databaseEntity.TargetId,
                 TargetType = databaseEntity.TargetType,
+                Message = databaseEntity.Message,
+                ApprovalStatus = databaseEntity.ApprovalStatus,
+                AuthorizedBy = databaseEntity.AuthorizedBy,
+                AuthorizedDate = databaseEntity.AuthorizedDate,
+                AuthorizerNote = databaseEntity.AuthorizerNote,
+                IsReadStatus = databaseEntity.IsReadStatus,
                 CreatedAt = databaseEntity.CreatedAt
             };
         }
@@ -22,9 +28,15 @@ namespace NotificationsApi.V1.Factories
 
             return new NotificationEntity
             {
-                Id = entity.Id,
+                // Id = entity.Id,
                 TargetId = entity.TargetId,
                 TargetType = entity.TargetType,
+                Message = entity.Message,
+                ApprovalStatus = entity.ApprovalStatus,
+                AuthorizedBy = entity.AuthorizedBy,
+                AuthorizedDate = entity.AuthorizedDate,
+                AuthorizerNote = entity.AuthorizerNote,
+                IsReadStatus = entity.IsReadStatus,
                 CreatedAt = entity.CreatedAt
             };
         }
