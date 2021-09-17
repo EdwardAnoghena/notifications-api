@@ -10,7 +10,9 @@ namespace NotificationsApi.V1.Factories
 
         public static NotificationResponseObject ToResponse(this Notification domain)
         {
-            return new NotificationResponseObject
+            return domain == null
+                ? null
+                : new NotificationResponseObject
             {
                 //Id = domain.Id,
                 TargetId = domain.TargetId,

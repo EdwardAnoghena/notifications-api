@@ -48,18 +48,19 @@ namespace NotificationsApi.V1.Gateways
             return result?.ToDomain();
         }
 
-        public async Task UpdateAsync(Guid id, ApprovalRequest notification)
+        public async Task<Notification> UpdateAsync(Guid id, ApprovalRequest notification)
         {
-            var result = await _dynamoDbContext.LoadAsync<NotificationEntity>(id).ConfigureAwait(false);
-            if (result != null)
-            {
-                if (!string.IsNullOrWhiteSpace(notification.ApprovalNote))
-                    result.AuthorizerNote = notification.ApprovalNote;
+            var loadData = await _dynamoDbContext.LoadAsync<NotificationEntity>(id).ConfigureAwait(false);
+            if (loadData == null) return null;
 
-                result.ApprovalStatus = notification.ApprovalStatus;
-                result.AuthorizedDate = DateTime.UtcNow;
-                await _dynamoDbContext.SaveAsync(result).ConfigureAwait(false);
-            }
+            if (!string.IsNullOrWhiteSpace(notification.ApprovalNote))
+                loadData.AuthorizerNote = notification.ApprovalNote;
+
+            loadData.ApprovalStatus = notification.ApprovalStatus;
+            loadData.AuthorizedDate = DateTime.UtcNow;
+            await _dynamoDbContext.SaveAsync(loadData).ConfigureAwait(false);
+
+            return loadData.ToDomain();
         }
     }
 }

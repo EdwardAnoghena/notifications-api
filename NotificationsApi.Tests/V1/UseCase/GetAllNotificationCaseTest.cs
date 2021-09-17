@@ -1,27 +1,26 @@
-using System.Linq;
 using AutoFixture;
+using FluentAssertions;
+using Moq;
 using NotificationsApi.V1.Boundary.Response;
 using NotificationsApi.V1.Domain;
 using NotificationsApi.V1.Factories;
 using NotificationsApi.V1.Gateways;
-using NotificationsApi.V1.UseCase;
-using FluentAssertions;
-using Moq;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace NotificationsApi.Tests.V1.UseCase
 {
-    public class GetAllUseCaseTests
+    public class GetAllNotificationCaseTest
     {
         private Mock<INotificationGateway> _mockGateway;
-        private GetAllNotificationCase _classUnderTest;
+        private NotificationsApi.V1.UseCase.GetAllNotificationCase _classUnderTest;
         private Fixture _fixture;
 
-        public GetAllUseCaseTests()
+        public GetAllNotificationCaseTest()
         {
             _mockGateway = new Mock<INotificationGateway>();
-            _classUnderTest = new GetAllNotificationCase(_mockGateway.Object);
+            _classUnderTest = new NotificationsApi.V1.UseCase.GetAllNotificationCase(_mockGateway.Object);
             _fixture = new Fixture();
         }
 
@@ -37,6 +36,17 @@ namespace NotificationsApi.Tests.V1.UseCase
             response.Should().BeEquivalentTo(expectedResponse);
         }
 
-        //TODO: Add extra tests here for extra functionality added to the use case
+        [Fact]
+        public async Task GetSingleOneFromTheGateway()
+        {
+            var stubbedEntities = _fixture.CreateMany<Notification>(1).ToList();
+            _mockGateway.Setup(x => x.GetAllAsync()).ReturnsAsync(stubbedEntities);
+            var expectedResponse = new NotificationResponseObjectList { ResponseObjects = stubbedEntities.ToResponse() };
+
+            var response = await _classUnderTest.ExecuteAsync().ConfigureAwait(false);
+            response.Should().BeEquivalentTo(expectedResponse);
+            response.ResponseObjects.Should().HaveCount(1);
+        }
+
     }
 }

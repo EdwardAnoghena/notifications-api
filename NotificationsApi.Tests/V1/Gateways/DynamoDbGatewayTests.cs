@@ -1,20 +1,18 @@
 using Amazon.DynamoDBv2.DataModel;
 using AutoFixture;
+using FluentAssertions;
+using Moq;
 using NotificationsApi.Tests.V1.Helper;
+using NotificationsApi.V1.Boundary.Request;
+using NotificationsApi.V1.Common.Enums;
 using NotificationsApi.V1.Domain;
 using NotificationsApi.V1.Gateways;
 using NotificationsApi.V1.Infrastructure;
-using FluentAssertions;
-using Moq;
-using System.Threading.Tasks;
 using System;
-using Xunit;
-using NotificationsApi.V1.Factories;
 using System.Collections.Generic;
 using System.Threading;
-using NotificationsApi.V1.Boundary.Request;
-using NotificationsApi.V1.Common.Enums;
-using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace NotificationsApi.Tests.V1.Gateways
 {

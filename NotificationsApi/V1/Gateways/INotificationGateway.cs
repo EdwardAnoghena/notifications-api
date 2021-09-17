@@ -13,6 +13,6 @@ namespace NotificationsApi.V1.Gateways
         Task<List<Notification>> GetAllAsync();
         Task AddAsync(Notification notification);
 
-        Task UpdateAsync(Guid id, ApprovalRequest notification);
+        Task<Notification> UpdateAsync(Guid id, ApprovalRequest notification);
     }
 }
