@@ -26,7 +26,7 @@ services:
       - ./database:/docker-entrypoint-initdb.d
 
   base-api-test:
-    image: base-api-test
+    image: notifications-api-test
     build:
       context: .
       dockerfile: NotificationsApi.Tests/Dockerfile
@@ -43,7 +43,7 @@ services:
       - AWS_ACCESS_KEY_ID=local
       - AWS_SECRET_ACCESS_KEY=local
     links:
-#      - test-database
+      - test-database
 # TODO: If using DynamoDb remove the line above and uncomment the line below.
       - dynamodb-database
 

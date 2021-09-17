@@ -1,21 +1,21 @@
 using System;
 using NotificationsApi.V1.Domain;
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
 
 namespace NotificationsApi.Tests.V1.Domain
 {
-    [TestFixture]
+
     public class EntityTests
     {
-        [Test]
+        [Fact]
         public void EntitiesHaveAnId()
         {
             var entity = new Notification { TargetId = Guid.NewGuid() };
             entity.TargetId.Should().NotBeEmpty();//.BeGreaterOrEqualTo(0);
         }
 
-        [Test]
+        [Fact]
         public void EntitiesHaveACreatedAt()
         {
             var entity = new Notification();

@@ -7,8 +7,8 @@ using NotificationsApi.V1.Gateways;
 using NotificationsApi.V1.UseCase;
 using FluentAssertions;
 using Moq;
-using NUnit.Framework;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace NotificationsApi.Tests.V1.UseCase
 {
@@ -18,15 +18,14 @@ namespace NotificationsApi.Tests.V1.UseCase
         private GetAllNotificationCase _classUnderTest;
         private Fixture _fixture;
 
-        [SetUp]
-        public void SetUp()
+        public GetAllUseCaseTests()
         {
             _mockGateway = new Mock<INotificationGateway>();
             _classUnderTest = new GetAllNotificationCase(_mockGateway.Object);
             _fixture = new Fixture();
         }
 
-        [Test]
+        [Fact]
         public async Task GetsAllFromTheGateway()
         {
             var stubbedEntities = _fixture.CreateMany<Notification>().ToList();
