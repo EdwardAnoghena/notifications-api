@@ -48,7 +48,7 @@ namespace NotificationsApi.V1.Gateways
             return result?.ToDomain();
         }
 
-        public async Task UpdateAsync(Guid id, AppprovalRequest notification)
+        public async Task UpdateAsync(Guid id, ApprovalRequest notification)
         {
             var result = await _dynamoDbContext.LoadAsync<NotificationEntity>(id).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(notification.ApprovalNote))
