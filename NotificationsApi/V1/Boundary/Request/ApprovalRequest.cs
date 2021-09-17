@@ -3,7 +3,7 @@ using System;
 
 namespace NotificationsApi.V1.Boundary.Request
 {
-    public class AppprovalRequest
+    public class ApprovalRequest
     {
         public ApprovalStatus ApprovalStatus { get; set; }
         public string ApprovalNote { get; set; }

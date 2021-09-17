@@ -16,7 +16,7 @@ namespace NotificationsApi.V1.UseCase
             _gateway = gateway;
         }
 
-        public async Task<ActionResponse> ExecuteAsync(Guid id, AppprovalRequest request)
+        public async Task<ActionResponse> ExecuteAsync(Guid id, ApprovalRequest request)
         {
             await _gateway.UpdateAsync(id, request).ConfigureAwait(false);
             var rId = await _gateway.GetEntityByIdAsync(id).ConfigureAwait(false);

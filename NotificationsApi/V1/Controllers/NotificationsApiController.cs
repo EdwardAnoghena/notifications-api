@@ -84,7 +84,7 @@ namespace NotificationsApi.V1.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPatch]
         [Route("{targetId}")]
-        public async Task<IActionResult> UpdateAsync(Guid targetId, [FromBody] AppprovalRequest request)
+        public async Task<IActionResult> UpdateAsync(Guid targetId, [FromBody] ApprovalRequest request)
         {
             var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
             if (result == null)

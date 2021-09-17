@@ -10,7 +10,7 @@ namespace NotificationsApi.Tests
     {
         protected HttpClient Client { get; private set; }
         private DynamoDbMockWebApplicationFactory<TStartup> _factory;
-        protected IDynamoDBContext DynamoDbContext => _factory?.DynamoDbContext;
+        public IDynamoDBContext DynamoDbContext => _factory?.DynamoDbContext;
         protected List<Action> CleanupActions { get; set; }
 
         private readonly List<TableDef> _tables = new List<TableDef>

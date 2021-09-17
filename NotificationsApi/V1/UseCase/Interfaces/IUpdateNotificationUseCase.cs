@@ -7,6 +7,6 @@ namespace NotificationsApi.V1.UseCase.Interfaces
 {
     public interface IUpdateNotificationUseCase
     {
-        public Task<ActionResponse> ExecuteAsync(Guid id, AppprovalRequest request);
+        public Task<ActionResponse> ExecuteAsync(Guid id, ApprovalRequest request);
     }
 }
