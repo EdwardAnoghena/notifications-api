@@ -1,7 +1,7 @@
 using NotificationsApi.V1.Gateways;
 using NotificationsApi.V1.UseCase;
 using Moq;
-using NUnit.Framework;
+
 
 namespace NotificationsApi.Tests.V1.UseCase
 {
@@ -10,8 +10,8 @@ namespace NotificationsApi.Tests.V1.UseCase
         private Mock<INotificationGateway> _mockGateway;
         private GetByIdNotificationCase _classUnderTest;
 
-        [SetUp]
-        public void SetUp()
+
+        public GetByIdUseCaseTests()
         {
             _mockGateway = new Mock<INotificationGateway>();
             _classUnderTest = new GetByIdNotificationCase(_mockGateway.Object);

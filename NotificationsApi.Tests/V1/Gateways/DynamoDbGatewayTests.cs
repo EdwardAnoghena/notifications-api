@@ -6,28 +6,27 @@ using NotificationsApi.V1.Gateways;
 using NotificationsApi.V1.Infrastructure;
 using FluentAssertions;
 using Moq;
-using NUnit.Framework;
 using System.Threading.Tasks;
 using System;
+using Xunit;
 
 namespace NotificationsApi.Tests.V1.Gateways
 {
 
-    [TestFixture]
     public class DynamoDbGatewayTests
     {
         private readonly Fixture _fixture = new Fixture();
         private Mock<IDynamoDBContext> _dynamoDb;
         private DynamoDbGateway _classUnderTest;
 
-        [SetUp]
-        public void Setup()
+
+        public DynamoDbGatewayTests()
         {
             _dynamoDb = new Mock<IDynamoDBContext>();
             _classUnderTest = new DynamoDbGateway(_dynamoDb.Object);
         }
 
-        [Test]
+        [Fact]
         public void GetEntityByIdReturnsNullIfEntityDoesntExist()
         {
             var guid = Guid.NewGuid();
@@ -36,7 +35,7 @@ namespace NotificationsApi.Tests.V1.Gateways
             response.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public async Task GetEntityByIdReturnsTheEntityIfItExists()
         {
             var entity = _fixture.Create<Notification>();

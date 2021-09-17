@@ -1,18 +1,17 @@
 using NotificationsApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using NUnit.Framework;
 
 namespace NotificationsApi.Tests
 {
-    [TestFixture]
+
     public class DatabaseTests
     {
         private IDbContextTransaction _transaction;
         protected DatabaseContext DatabaseContext { get; private set; }
 
-        [SetUp]
-        public void RunBeforeAnyTests()
+
+        public DatabaseTests()
         {
             var builder = new DbContextOptionsBuilder();
             builder.UseNpgsql(ConnectionString.TestDatabase());
@@ -22,7 +21,7 @@ namespace NotificationsApi.Tests
             _transaction = DatabaseContext.Database.BeginTransaction();
         }
 
-        [TearDown]
+
         public void RunAfterAnyTests()
         {
             _transaction.Rollback();
