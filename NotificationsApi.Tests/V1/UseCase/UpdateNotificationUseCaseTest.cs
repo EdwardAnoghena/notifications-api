@@ -39,15 +39,15 @@ namespace NotificationsApi.Tests.V1.UseCase
             var targetId = Guid.NewGuid();
             var entity = _fixture.Build<Notification>()
                                 .With(_ => _.TargetId, targetId)
-                                .With(_=>_.AuthorizedDate, DateTime.UtcNow)
+                                .With(_ => _.AuthorizedDate, DateTime.UtcNow)
                                 .With(_ => _.ApprovalStatus, ApprovalStatus.Approve)
                                 .Create();
             var request = _fixture.Build<ApprovalRequest>()
                                  .With(_ => _.ApprovalStatus, ApprovalStatus.Approve)
                                  .Create();
             _mockGateway.Setup(x => x.UpdateAsync(targetId, request)).ReturnsAsync(entity);
-         
-            
+
+
             var response = await _updateUseCase.ExecuteAsync(targetId, request)
                 .ConfigureAwait(false);
             response.Status.Should().BeTrue();
@@ -59,7 +59,7 @@ namespace NotificationsApi.Tests.V1.UseCase
         public async Task UpdateNotificationUseCaseReturnsFalseResult()
         {
             var targetId = Guid.NewGuid();
-          
+
             var request = _fixture.Build<ApprovalRequest>()
                                  .With(_ => _.ApprovalStatus, ApprovalStatus.Approve)
                                  .Create();

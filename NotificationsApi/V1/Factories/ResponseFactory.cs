@@ -13,18 +13,18 @@ namespace NotificationsApi.V1.Factories
             return domain == null
                 ? null
                 : new NotificationResponseObject
-            {
-                //Id = domain.Id,
-                TargetId = domain.TargetId,
-                TargetType = domain.TargetType,
-                AuthorizedBy = domain.AuthorizedBy,
-                AuthorizedDate = domain.AuthorizedDate,
-                AuthorizerNote = domain.AuthorizerNote,
-                ApprovalStatus = domain.ApprovalStatus,
-                IsReadStatus = domain.IsReadStatus,
-                Message = domain.Message,
-                CreatedDate = domain.CreatedAt
-            };
+                {
+                    //Id = domain.Id,
+                    TargetId = domain.TargetId,
+                    TargetType = domain.TargetType,
+                    AuthorizedBy = domain.AuthorizedBy,
+                    AuthorizedDate = domain.AuthorizedDate,
+                    AuthorizerNote = domain.AuthorizerNote,
+                    ApprovalStatus = domain.ApprovalStatus,
+                    IsReadStatus = domain.IsReadStatus,
+                    Message = domain.Message,
+                    CreatedDate = domain.CreatedAt
+                };
         }
 
         public static List<NotificationResponseObject> ToResponse(this IEnumerable<Notification> domainList)

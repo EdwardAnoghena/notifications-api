@@ -12,8 +12,6 @@ namespace NotificationsApi.Tests.V1.Factories
     {
         private readonly Fixture _fixture = new Fixture();
 
-        //TODO: add assertions for all the fields being mapped in `EntityFactory.ToDomain()`. Also be sure to add test cases for
-        // any edge cases that might exist.
         [Fact]
         public void CanMapADatabaseEntityToADomainObject()
         {
@@ -22,10 +20,15 @@ namespace NotificationsApi.Tests.V1.Factories
 
             databaseEntity.TargetId.Should().Be(entity.TargetId);
             databaseEntity.CreatedAt.Should().BeSameDateAs(entity.CreatedAt);
+            databaseEntity.ApprovalStatus.Should().Be(entity.ApprovalStatus);
+            databaseEntity.AuthorizedDate.Should().BeSameDateAs(entity.AuthorizedDate.Value);
+            databaseEntity.AuthorizerNote.Should().BeEquivalentTo(entity.AuthorizerNote);
+            databaseEntity.AuthorizedBy.Should().BeEquivalentTo(entity.AuthorizedBy);
+            databaseEntity.IsReadStatus.Should().Be(entity.IsReadStatus);
+            databaseEntity.TargetType.Should().Be(entity.TargetType);
+            databaseEntity.Message.Should().BeEquivalentTo(entity.Message);
         }
 
-        //TODO: add assertions for all the fields being mapped in `EntityFactory.ToDatabase()`. Also be sure to add test cases for
-        // any edge cases that might exist.
         [Fact]
         public void CanMapADomainEntityToADatabaseObject()
         {
@@ -34,6 +37,13 @@ namespace NotificationsApi.Tests.V1.Factories
 
             entity.TargetId.Should().Be(databaseEntity.TargetId);
             entity.CreatedAt.Should().BeSameDateAs(databaseEntity.CreatedAt);
+            entity.ApprovalStatus.Should().Be(databaseEntity.ApprovalStatus);
+            entity.AuthorizedDate.Should().BeSameDateAs(databaseEntity.AuthorizedDate.Value);
+            entity.AuthorizerNote.Should().BeEquivalentTo(databaseEntity.AuthorizerNote);
+            entity.AuthorizedBy.Should().BeEquivalentTo(databaseEntity.AuthorizedBy);
+            entity.IsReadStatus.Should().Be(databaseEntity.IsReadStatus);
+            entity.TargetType.Should().Be(databaseEntity.TargetType);
+            entity.Message.Should().BeEquivalentTo(databaseEntity.Message);
         }
     }
 }

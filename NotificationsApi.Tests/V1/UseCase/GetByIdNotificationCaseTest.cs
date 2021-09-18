@@ -36,15 +36,15 @@ namespace NotificationsApi.Tests.V1.UseCase
             var response = await _classUnderTest.ExecuteAsync(stubbedEntity.TargetId).ConfigureAwait(false);
             response.Should().NotBeNull();
             response.Should().BeEquivalentTo(expectedResponse);
-           
+
         }
 
         [Fact]
         public async Task GetByIdUsecaseShouldBeNull()
         {
-          
+
             var targetId = Guid.NewGuid();
-            _mockGateway.Setup(x => x.GetEntityByIdAsync(targetId)).ReturnsAsync((Notification)null);
+            _mockGateway.Setup(x => x.GetEntityByIdAsync(targetId)).ReturnsAsync((Notification) null);
 
 
             var response = await _classUnderTest.ExecuteAsync(targetId).ConfigureAwait(false);

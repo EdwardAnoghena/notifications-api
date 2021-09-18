@@ -18,16 +18,14 @@ namespace NotificationsApi.V1.Controllers
         private readonly IGetByIdNotificationCase _getByIdNotificationCase;
         private readonly IAddNotificationUseCase _addNotificationUseCase;
         private readonly IUpdateNotificationUseCase _updateNotificationUseCase;
-        private readonly IGetTargetDetailsCase _getTargetDetailsCase;
         public NotificationsApiController(IGetAllNotificationCase getAllNotificationCase, IGetByIdNotificationCase getByIdNotificationCase,
-                                           IAddNotificationUseCase addNotificationUseCase, IUpdateNotificationUseCase updateNotificationUseCase,
-                                           IGetTargetDetailsCase getTargetDetailsCase)
+                                           IAddNotificationUseCase addNotificationUseCase, IUpdateNotificationUseCase updateNotificationUseCase)
         {
             _getAllNotificationCase = getAllNotificationCase;
             _getByIdNotificationCase = getByIdNotificationCase;
             _addNotificationUseCase = addNotificationUseCase;
             _updateNotificationUseCase = updateNotificationUseCase;
-            _getTargetDetailsCase = getTargetDetailsCase;
+
         }
 
         //TODO: add xml comments containing information that will be included in the auto generated swagger docs (https://github.com/LBHackney-IT/lbh-base-api/wiki/Controllers-and-Response-Objects)
@@ -59,10 +57,9 @@ namespace NotificationsApi.V1.Controllers
         {
             var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
             if (result == null)
-                return NotFound();
+                return NotFound(targetId);
 
             return Ok(result);
-            //return Ok(await _getTargetDetailsCase.ExecuteAsync(id).ConfigureAwait(false));
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -74,7 +71,7 @@ namespace NotificationsApi.V1.Controllers
         {
 
             var result = await _addNotificationUseCase.ExecuteAsync(request).ConfigureAwait(false);
-            return CreatedAtAction(nameof(GetAsync), new { id = result });
+            return CreatedAtAction(nameof(GetAsync), new { targetId = result });
 
         }
 
@@ -88,7 +85,7 @@ namespace NotificationsApi.V1.Controllers
         {
             var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
             if (result == null)
-                return NotFound();
+                return NotFound(targetId);
             var updateResult = await _updateNotificationUseCase.ExecuteAsync(targetId, request).ConfigureAwait(false);
             if (updateResult.Status)
                 return Ok(updateResult);
