@@ -7,5 +7,6 @@ namespace NotificationsApi.V1.Boundary.Request
     {
         public Guid TargetId { get; set; }
         public TargetType TargetType { get; set; }
+        public string Message { get; set; }
     }
 }
