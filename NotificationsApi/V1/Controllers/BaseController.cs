@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
 
 namespace NotificationsApi.V1.Controllers
 {
@@ -36,9 +37,11 @@ namespace NotificationsApi.V1.Controllers
 
                 settings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 settings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-
+                settings.Converters.Add(new StringEnumConverter());
                 return settings;
             };
         }
+
+
     }
 }

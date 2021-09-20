@@ -20,7 +20,7 @@ namespace NotificationsApi.V1.UseCase
         public async Task<NotificationResponseObject> ExecuteAsync(Guid id)
         {
             var response = await _gateway.GetEntityByIdAsync(id).ConfigureAwait(false);
-            return response.ToResponse();
+            return response?.ToResponse();
         }
     }
 }
