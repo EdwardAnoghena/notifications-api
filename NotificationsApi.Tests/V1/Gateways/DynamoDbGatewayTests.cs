@@ -115,13 +115,13 @@ namespace NotificationsApi.Tests.V1.Gateways
         {
             // Arrange
             var entityRequest = _fixture.Build<Notification>()
-                                   .With(x => x.ApprovalStatus, ApprovalStatus.Initiate)
+                                   .With(x => x.ApprovalStatus, ApprovalStatus.Initiated)
                                  .Create();
             var dbEntity = DatabaseEntityHelper.CreateDatabaseEntityFrom(entityRequest);
             _dynamoDb.Setup(x => x.LoadAsync<NotificationEntity>(entityRequest.TargetId, default))
                      .ReturnsAsync(dbEntity);
 
-            var approvalRequest = new ApprovalRequest { ApprovalNote = "Approval Note", ApprovalStatus = ApprovalStatus.Approve };
+            var approvalRequest = new ApprovalRequest { ApprovalNote = "Approval Note", ApprovalStatus = ApprovalStatus.Approved };
 
             _dynamoDb.Setup(x => x.SaveAsync(It.IsAny<NotificationEntity>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
@@ -144,7 +144,7 @@ namespace NotificationsApi.Tests.V1.Gateways
             // Arrange
             var guid = Guid.NewGuid();
 
-            var approvalRequest = new ApprovalRequest { ApprovalNote = "Approval Note", ApprovalStatus = ApprovalStatus.Approve };
+            var approvalRequest = new ApprovalRequest { ApprovalNote = "Approval Note", ApprovalStatus = ApprovalStatus.Approved };
 
             _dynamoDb.Setup(x => x.SaveAsync(It.IsAny<NotificationEntity>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);

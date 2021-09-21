@@ -8,8 +8,6 @@ using NotificationsApi.V1.Common.Enums;
 using NotificationsApi.V1.Controllers;
 using NotificationsApi.V1.UseCase.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -53,7 +51,6 @@ namespace NotificationsApi.Tests.V1.Controllers
             // Arrange
             var targetId = Guid.NewGuid();
             _getByIdNotificationCase.Setup(x => x.ExecuteAsync(targetId)).ReturnsAsync((NotificationResponseObject) null);
-
             // Act
             var response = await _classUnderTest.GetAsync(targetId).ConfigureAwait(false);
 
@@ -134,13 +131,12 @@ namespace NotificationsApi.Tests.V1.Controllers
             var targetId = Guid.NewGuid();
             var request = new ApprovalRequest { };
             _updateNotificationUseCase.Setup(x => x.ExecuteAsync(targetId, request)).ReturnsAsync((ActionResponse) null);
-
             // Act
             var response = await _classUnderTest.UpdateAsync(targetId, request).ConfigureAwait(false);
 
             // Assert
             response.Should().BeOfType(typeof(NotFoundObjectResult));
-            (response as NotFoundObjectResult).Value.Should().Be(targetId);
+            (response as NotFoundObjectResult).Value.Should().BeEquivalentTo(targetId);
         }
 
         [Fact]
@@ -149,10 +145,10 @@ namespace NotificationsApi.Tests.V1.Controllers
             // Arrange
             var targetId = Guid.NewGuid();
 
-            var request = new ApprovalRequest { ApprovalNote = "", ApprovalStatus = ApprovalStatus.Approve };
+            var request = new ApprovalRequest { ApprovalNote = "", ApprovalStatus = ApprovalStatus.Approved };
             var updateResponse = new ActionResponse { Status = true };
             _getByIdNotificationCase.Setup(x => x.ExecuteAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(new NotificationResponseObject() { TargetId = targetId, ApprovalStatus = ApprovalStatus.Initiate });
+                .ReturnsAsync(new NotificationResponseObject() { TargetId = targetId, ApprovalStatus = ApprovalStatus.Initiated });
             _updateNotificationUseCase.Setup(x => x.ExecuteAsync(targetId, request)).ReturnsAsync(updateResponse);
 
             // Act
@@ -168,10 +164,10 @@ namespace NotificationsApi.Tests.V1.Controllers
         {
             // Arrange
             var targetId = Guid.NewGuid();
-            var request = new ApprovalRequest { ApprovalNote = "", ApprovalStatus = ApprovalStatus.Approve };
+            var request = new ApprovalRequest { ApprovalNote = "", ApprovalStatus = ApprovalStatus.Approved };
             var updateResponse = new ActionResponse { Status = false };
             _getByIdNotificationCase.Setup(x => x.ExecuteAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(new NotificationResponseObject() { TargetId = targetId, ApprovalStatus = ApprovalStatus.Initiate });
+                .ReturnsAsync(new NotificationResponseObject() { TargetId = targetId, ApprovalStatus = ApprovalStatus.Initiated });
             _updateNotificationUseCase.Setup(x => x.ExecuteAsync(targetId, request)).ReturnsAsync(updateResponse);
 
             // Act
@@ -189,7 +185,7 @@ namespace NotificationsApi.Tests.V1.Controllers
             var targetId = Guid.NewGuid();
             var exception = new ApplicationException("Test exception");
             _getByIdNotificationCase.Setup(x => x.ExecuteAsync(It.IsAny<Guid>()))
-               .ReturnsAsync(new NotificationResponseObject() { TargetId = targetId, ApprovalStatus = ApprovalStatus.Initiate });
+               .ReturnsAsync(new NotificationResponseObject() { TargetId = targetId, ApprovalStatus = ApprovalStatus.Initiated });
             _updateNotificationUseCase.Setup(x => x.ExecuteAsync(targetId, It.IsAny<ApprovalRequest>())).ThrowsAsync(exception);
 
             // Act

@@ -1,11 +1,10 @@
-using NotificationsApi.V1.Boundary.Response;
-using NotificationsApi.V1.UseCase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System;
 using NotificationsApi.V1.Boundary.Request;
-using System.Net;
+using NotificationsApi.V1.Boundary.Response;
+using NotificationsApi.V1.UseCase.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace NotificationsApi.V1.Controllers
 {
@@ -58,7 +57,7 @@ namespace NotificationsApi.V1.Controllers
         {
             var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
             if (result == null)
-                return NotFound(new ProblemDetails { Status = (int) HttpStatusCode.NotFound, Title = "Failure", Detail = "No Notification with this TargetID" });
+                return NotFound(targetId);
 
             return Ok(result);
         }
@@ -85,7 +84,7 @@ namespace NotificationsApi.V1.Controllers
         {
             var result = await _getByIdNotificationCase.ExecuteAsync(targetId).ConfigureAwait(false);
             if (result == null)
-                return NotFound();
+                return NotFound(targetId);
             var updateResult = await _updateNotificationUseCase.ExecuteAsync(targetId, request).ConfigureAwait(false);
             if (updateResult.Status)
                 return Ok(updateResult);

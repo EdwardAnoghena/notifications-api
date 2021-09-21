@@ -1,31 +1,28 @@
 using AutoFixture;
-using NotificationsApi;
-using NotificationsApi.Tests;
+using FluentAssertions;
+using Newtonsoft.Json.Linq;
+using NotificationsApi.V1.Boundary.Request;
+using NotificationsApi.V1.Boundary.Response;
+using NotificationsApi.V1.Common.Enums;
 using NotificationsApi.V1.Domain;
 using NotificationsApi.V1.Factories;
 using NotificationsApi.V1.Infrastructure;
-using FluentAssertions;
 using System;
+using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using NotificationsApi.V1.Boundary.Request;
-using Xunit;
-using NotificationsApi.V1.Boundary.Response;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Net.Http.Headers;
-using NotificationsApi.V1.Common.Enums;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace NotificationsApi.Tests.V1.E2ETests
 {
- //   For guidance on writing integration tests see the wiki page https://github.com/LBHackney-IT/lbh-base-api/wiki/Writing-Integration-Tests
- //   Example integration tests using DynamoDb
+    //   For guidance on writing integration tests see the wiki page https://github.com/LBHackney-IT/lbh-base-api/wiki/Writing-Integration-Tests
+    //   Example integration tests using DynamoDb
 
-public class NotificationE2EDynamoDbTest : DynamoDbIntegrationTests<Startup>
+    public class NotificationE2EDynamoDbTest : DynamoDbIntegrationTests<Startup>
     {
         private readonly Fixture _fixture = new Fixture();
 
@@ -40,10 +37,10 @@ public class NotificationE2EDynamoDbTest : DynamoDbIntegrationTests<Startup>
             entity.CreatedAt = DateTime.UtcNow;
             return entity;
         }
-        private NotificationRequest GivenANewNotificationRequest(TargetType targetType= TargetType.FailedDirectDebits, string message = "Direct Debit failed")
+        private NotificationRequest GivenANewNotificationRequest(TargetType targetType = TargetType.FailedDirectDebits, string message = "Direct Debit failed")
         {
             var entity = _fixture.Build<NotificationRequest>()
-                .With(_=>_.TargetType, targetType)
+                .With(_ => _.TargetType, targetType)
                  .With(_ => _.Message, message)
                 .Create();
             return entity;
@@ -51,8 +48,7 @@ public class NotificationE2EDynamoDbTest : DynamoDbIntegrationTests<Startup>
         private NotificationRequest GivenANewNotificationRequestWithValidationErrors()
         {
             var entity = _fixture.Build<NotificationRequest>()
-                           .Without(_=>_.TargetId)
-                           .Without(_=>_.TargetType)
+                           .Without(_ => _.TargetId)
                            .Create();
             return entity;
         }
@@ -134,7 +130,7 @@ public class NotificationE2EDynamoDbTest : DynamoDbIntegrationTests<Startup>
         }
 
         [Fact]
-        public async Task PostNotificationReturnsBadRequestWithValidationErrors()
+        public async Task PostNotificationReturnsUnprocessableEntityWithValidationErrors()
         {
             var requestObject = GivenANewNotificationRequestWithValidationErrors();
 
@@ -150,12 +146,9 @@ public class NotificationE2EDynamoDbTest : DynamoDbIntegrationTests<Startup>
             JObject jo = JObject.Parse(responseContent);
             var errors = jo["errors"].Children();
 
-            ShouldHaveErrorFor(errors, "FirstName");
-            ShouldHaveErrorFor(errors, "Surname");
-            ShouldHaveErrorFor(errors, "MiddleName");
-            ShouldHaveErrorFor(errors, "PlaceOfBirth");
+            ShouldHaveErrorFor(errors, "TargetId");
 
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
 
         }
 

@@ -6,13 +6,9 @@ using NotificationsApi.V1.Boundary.Request;
 using NotificationsApi.V1.Boundary.Response;
 using NotificationsApi.V1.Common.Enums;
 using NotificationsApi.V1.Domain;
-using NotificationsApi.V1.Factories;
 using NotificationsApi.V1.Gateways;
-using NotificationsApi.V1.Infrastructure;
 using NotificationsApi.V1.UseCase;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -40,10 +36,10 @@ namespace NotificationsApi.Tests.V1.UseCase
             var entity = _fixture.Build<Notification>()
                                 .With(_ => _.TargetId, targetId)
                                 .With(_ => _.AuthorizedDate, DateTime.UtcNow)
-                                .With(_ => _.ApprovalStatus, ApprovalStatus.Approve)
+                                .With(_ => _.ApprovalStatus, ApprovalStatus.Approved)
                                 .Create();
             var request = _fixture.Build<ApprovalRequest>()
-                                 .With(_ => _.ApprovalStatus, ApprovalStatus.Approve)
+                                 .With(_ => _.ApprovalStatus, ApprovalStatus.Approved)
                                  .Create();
             _mockGateway.Setup(x => x.UpdateAsync(targetId, request)).ReturnsAsync(entity);
 
@@ -61,7 +57,7 @@ namespace NotificationsApi.Tests.V1.UseCase
             var targetId = Guid.NewGuid();
 
             var request = _fixture.Build<ApprovalRequest>()
-                                 .With(_ => _.ApprovalStatus, ApprovalStatus.Approve)
+                                 .With(_ => _.ApprovalStatus, ApprovalStatus.Approved)
                                  .Create();
             _mockGateway.Setup(x => x.UpdateAsync(targetId, request)).ReturnsAsync((Notification) null);
             var response = await _updateUseCase.ExecuteAsync(targetId, request).ConfigureAwait(false);
