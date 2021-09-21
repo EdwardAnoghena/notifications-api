@@ -2,7 +2,6 @@ using Amazon.DynamoDBv2.DataModel;
 using NotificationsApi.V1.Common.Enums;
 using NotificationsApi.V1.Infrastructure.Conventers;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NotificationsApi.V1.Infrastructure
 {
@@ -33,6 +32,10 @@ namespace NotificationsApi.V1.Infrastructure
         public string Message { get; set; }
         [DynamoDBProperty(AttributeName = "is_read_status", Converter = typeof(DynamoDbBooleanConverter))]
         public bool IsReadStatus { get; set; }
+        [DynamoDBProperty(AttributeName = "is_removed_status", Converter = typeof(DynamoDbBooleanConverter))]
+        public bool IsRemovedStatus { get; set; }
+        [DynamoDBProperty(AttributeName = "is_approval_required", Converter = typeof(DynamoDbBooleanConverter))]
+        public bool IsApprovalRequired { get; set; }
         [DynamoDBProperty(AttributeName = "authorizer_note")]
         public string AuthorizerNote { get; set; }
         [DynamoDBProperty(AttributeName = "approval_status", Converter = typeof(DynamoDbEnumConverter<ApprovalStatus>))]
